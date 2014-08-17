@@ -1,0 +1,49 @@
+apply plugin: 'com.android.application'
+apply plugin: 'com.neenbedankt.android-apt'
+apply plugin: 'hugo'
+
+android {
+  compileSdkVersion rootProject.ext.compileSdkVersion
+  buildToolsVersion rootProject.ext.buildToolsVersion
+
+  packagingOptions {
+    exclude 'META-INF/services/javax.annotation.processing.Processor'
+  }
+
+  lintOptions {
+    abortOnError false
+  }
+
+  testBuildType "debug"
+
+  buildTypes {
+    debug {
+      applicationIdSuffix ".debug"
+      versionNameSuffix "-debug"
+    }
+    release {
+      runProguard false
+      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+    }
+  }
+
+  defaultConfig {
+    minSdkVersion rootProject.ext.minSdkVersionWear
+    targetSdkVersion rootProject.ext.targetSdkVersion
+
+    applicationId rootProject.ext.applicationId + ".wear"
+    versionCode rootProject.ext.versionCode
+    versionName rootProject.ext.versionName
+
+    buildConfigField "String", "GIT_SHA", rootProject.ext.gitSha
+    buildConfigField "String", "BUILD_TIME", rootProject.ext.buildTime
+  }
+}
+
+dependencies {
+  compile project(':common')
+  apt rootProject.ext.libraries.daggerCompiler
+  compile rootProject.ext.libraries.supportWearable
+}
+
+apply from: rootProject.file('gradle/checkstyle-app.gradle')

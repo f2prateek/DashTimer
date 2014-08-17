@@ -1,0 +1,49 @@
+apply plugin: 'com.android.library'
+apply plugin: 'com.neenbedankt.android-apt'
+apply plugin: 'hugo'
+
+android {
+  compileSdkVersion rootProject.ext.compileSdkVersion
+  buildToolsVersion rootProject.ext.buildToolsVersion
+
+  packagingOptions {
+    exclude 'META-INF/services/javax.annotation.processing.Processor'
+  }
+
+  lintOptions {
+    abortOnError false
+  }
+
+
+  buildTypes {
+    release {
+      runProguard false
+      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+    }
+  }
+
+  defaultConfig {
+    minSdkVersion rootProject.ext.minSdkVersion
+    targetSdkVersion rootProject.ext.targetSdkVersion
+
+    applicationId rootProject.ext.applicationId + ".common"
+    versionCode rootProject.ext.versionCode
+    versionName rootProject.ext.versionName
+
+    buildConfigField "String", "GIT_SHA", rootProject.ext.gitSha
+    buildConfigField "String", "BUILD_TIME", rootProject.ext.buildTime
+  }
+}
+
+dependencies {
+  compile rootProject.ext.libraries.dagger
+  apt rootProject.ext.libraries.daggerCompiler
+  compile rootProject.ext.libraries.otto
+  compile rootProject.ext.libraries.ln
+  compile rootProject.ext.libraries.butterknife
+  compile rootProject.ext.libraries.dart
+  apt rootProject.ext.libraries.auto
+  compile rootProject.ext.libraries.playWearable
+}
+
+apply from: rootProject.file('gradle/checkstyle-library.gradle')
