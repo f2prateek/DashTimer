@@ -18,6 +18,10 @@ package com.f2prateek.dashtimer.common.data;
 
 import dagger.Module;
 
+/**
+ * A module for user preferences. You don't need to use this, but I like a centralized configuration
+ * for these. {@link http://bit.ly/1uKm1Ur}
+ */
 @Module(complete = false, library = true)
 public final class UserPreferencesModule {
 }

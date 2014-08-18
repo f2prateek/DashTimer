@@ -26,7 +26,7 @@ import javax.inject.Singleton;
 @Module(
     library = true,
     includes = {
-        DataModule.class
+        UiModule.class, DataModule.class
     },
     injects = {
         DashTimerApp.class

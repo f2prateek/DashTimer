@@ -23,6 +23,10 @@ import dagger.Module;
 import dagger.Provides;
 import javax.inject.Singleton;
 
+/**
+ * A module for Activity dependencies. This is different from {@link UiModule} in that these will
+ * only be available from the Activity Graph.
+ */
 @Module(library = true, complete = false, addsTo = UiModule.class)
 public class ActivityModule {
   private final BaseActivity activity;

@@ -26,5 +26,5 @@ import dagger.Module;
     },
     addsTo = DashTimerModule.class //
 )
-public final class DashTimerWearModule {
+final class DashTimerWearModule {
 }

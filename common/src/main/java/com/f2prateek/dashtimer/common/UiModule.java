@@ -18,6 +18,11 @@ package com.f2prateek.dashtimer.common;
 
 import dagger.Module;
 
+/**
+ * {@link Module} for UI related dependencies. This is different from {@link
+ * com.f2prateek.dashtimer.common.activities.ActivityModule} in that these dependencies will be
+ * available to the application graph, and not just the activity graph.
+ */
 @Module(complete = false, library = true)
 public final class UiModule {
 }

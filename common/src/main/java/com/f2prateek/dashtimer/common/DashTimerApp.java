@@ -23,6 +23,10 @@ import com.f2prateek.ln.Ln;
 import dagger.ObjectGraph;
 import hugo.weaving.DebugLog;
 
+/**
+ * A base {@link Application} that sets up the applicationGraph. Subclasses must override {@link
+ * #getModules()} to provide additional dependencies.
+ */
 public abstract class DashTimerApp extends Application {
   private ObjectGraph applicationGraph;
 
@@ -40,6 +44,11 @@ public abstract class DashTimerApp extends Application {
     applicationGraph.inject(this);
   }
 
+  /**
+   * Provide any modules that should be in the application graph. At the very least, they must use
+   * {@link DashTimerModule} and a module to list their inject points.
+   */
+  //todo: enforce at compile time with abstract method
   protected abstract Object[] getModules();
 
   @DebugLog

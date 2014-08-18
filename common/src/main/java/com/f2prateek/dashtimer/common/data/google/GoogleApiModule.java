@@ -27,6 +27,9 @@ import dagger.Module;
 import dagger.Provides;
 import javax.inject.Singleton;
 
+/**
+ * A module for google API dependencies. Not necessary, but just a personal preference.
+ */
 @Module(complete = false, library = true)
 public final class GoogleApiModule {
 

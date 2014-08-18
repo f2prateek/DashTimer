@@ -28,6 +28,9 @@ import javax.inject.Singleton;
 
 import static android.content.Context.MODE_PRIVATE;
 
+/**
+ * A module for data related dependencies. This will be available from the application graph.
+ */
 @Module(
     includes = {
         GoogleApiModule.class, UserPreferencesModule.class

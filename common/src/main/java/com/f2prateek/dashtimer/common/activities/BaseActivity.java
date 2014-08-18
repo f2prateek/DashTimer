@@ -26,12 +26,18 @@ import com.f2prateek.dashtimer.common.ForActivity;
 import com.squareup.otto.Bus;
 import dagger.ObjectGraph;
 import hugo.weaving.DebugLog;
-import java.util.ArrayList;
-import java.util.List;
 import javax.inject.Inject;
 
 /**
- * This does not call Butterknife.inject due to different lifecycles on the phone and on mobile.
+ * An {@link Activity} that configures common setup, including creating the activity {@link
+ * ObjectGraph}, registering and unregistering with the global {@link Bus}, injecting extras with
+ * and {@link Dart}.
+ * <p/>
+ * Subclasses MUST override {@link #getModules()} to provide any additional dependencies. At the
+ * very least, they will have to provide a module that lists all the inject points for the variant.
+ * <p/>
+ * This does not call Butterknife.inject due to differences in the layout lifecycles between the
+ * phone and wear.
  */
 public abstract class BaseActivity extends Activity {
   @Inject Bus bus;
@@ -52,7 +58,7 @@ public abstract class BaseActivity extends Activity {
   private void buildActivityGraphAndInject() {
     // Create the activity graph by .plus-ing our modules onto the application graph.
     DashTimerApp app = DashTimerApp.get(this);
-    activityGraph = app.getApplicationGraph().plus(getModules().toArray());
+    activityGraph = app.getApplicationGraph().plus(getModules());
 
     // Inject ourselves so subclasses will have dependencies fulfilled when this method returns.
     activityGraph.inject(this);
@@ -64,16 +70,10 @@ public abstract class BaseActivity extends Activity {
   }
 
   /**
-   * A list of modules to use for the individual activity graph. Subclasses MUST override this
-   * method to provide additional modules provided they call and include the modules returned by
-   * calling {@code super.getModules()}. At the very lest, this must include all the inject points.
-   * todo: introduce an abstract method so subclasses are forced to implement this at compile time
+   * A list of modules to use for the individual activity graph. At the very lest, this must include
+   * all the inject points and {@link ActivityModule}.
    */
-  protected List<Object> getModules() {
-    ArrayList<Object> baseModules = new ArrayList<Object>();
-    baseModules.add(new ActivityModule(this));
-    return baseModules;
-  }
+  protected abstract Object[] getModules();
 
   @Override protected void onResume() {
     super.onResume();

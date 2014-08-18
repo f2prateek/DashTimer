@@ -17,12 +17,9 @@
 package com.f2prateek.dashtimer.wear.activities;
 
 import com.f2prateek.dashtimer.common.activities.BaseActivity;
-import java.util.List;
 
 public class BaseWearActivity extends BaseActivity {
-  @Override protected List<Object> getModules() {
-    List<Object> modules = super.getModules();
-    modules.add(new WearActivityModule());
-    return modules;
+  @Override protected Object[] getModules() {
+    return Modules.list(this);
   }
 }

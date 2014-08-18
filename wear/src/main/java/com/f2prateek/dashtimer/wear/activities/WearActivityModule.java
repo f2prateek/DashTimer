@@ -27,5 +27,5 @@ import dagger.Module;
         MainActivity.class, TimerActivity.class
     } //
 )
-public class WearActivityModule {
+final class WearActivityModule {
 }

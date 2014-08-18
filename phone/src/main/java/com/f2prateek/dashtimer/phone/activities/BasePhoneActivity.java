@@ -17,12 +17,9 @@
 package com.f2prateek.dashtimer.phone.activities;
 
 import com.f2prateek.dashtimer.common.activities.BaseActivity;
-import java.util.List;
 
 public class BasePhoneActivity extends BaseActivity {
-  @Override protected List<Object> getModules() {
-    List<Object> modules = super.getModules();
-    modules.add(new PhoneActivityModule());
-    return modules;
+  @Override protected Object[] getModules() {
+    return Modules.list(this);
   }
 }
