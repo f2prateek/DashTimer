@@ -31,7 +31,7 @@ android {
     minSdkVersion rootProject.ext.minSdkVersionWear
     targetSdkVersion rootProject.ext.targetSdkVersion
 
-    applicationId rootProject.ext.applicationId + ".wear"
+    applicationId rootProject.ext.applicationId
     versionCode rootProject.ext.versionCode
     versionName rootProject.ext.versionName
 

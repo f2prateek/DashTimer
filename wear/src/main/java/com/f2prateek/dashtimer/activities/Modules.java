@@ -14,17 +14,19 @@
  * limitations under the License.
  */
 
-package com.f2prateek.dashtimer.wear;
+package com.f2prateek.dashtimer.activities;
 
-import com.f2prateek.dashtimer.common.DashTimerModule;
-import dagger.Module;
+import com.f2prateek.dashtimer.common.activities.ActivityModule;
+import com.f2prateek.dashtimer.common.activities.BaseActivity;
 
-@Module(
-    complete = false,
-    injects = {
-        DashTimerWearApp.class
-    },
-    addsTo = DashTimerModule.class //
-)
-final class DashTimerWearModule {
+final class Modules {
+  static Object[] list(BaseActivity activity) {
+    return new Object[] {
+        new ActivityModule(activity), new WearActivityModule()
+    };
+  }
+
+  private Modules() {
+    throw new AssertionError("No instances");
+  }
 }

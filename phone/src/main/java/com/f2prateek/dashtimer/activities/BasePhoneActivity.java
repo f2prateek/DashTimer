@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.f2prateek.dashtimer.phone.activities;
+package com.f2prateek.dashtimer.activities;
 
 import com.f2prateek.dashtimer.common.activities.BaseActivity;
 

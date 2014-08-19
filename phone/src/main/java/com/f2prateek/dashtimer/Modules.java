@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package com.f2prateek.dashtimer.wear;
+package com.f2prateek.dashtimer;
 
 import com.f2prateek.dashtimer.common.DashTimerModule;
 
 final class Modules {
-  static Object[] list(DashTimerWearApp app) {
+  static Object[] list(DashTimerPhoneApp app) {
     return new Object[] {
-        new DashTimerModule(app), new DashTimerWearModule()
+        new DashTimerModule(app), new DashTimerPhoneModule()
     };
   }
 

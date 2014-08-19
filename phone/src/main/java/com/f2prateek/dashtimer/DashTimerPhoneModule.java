@@ -14,18 +14,17 @@
  * limitations under the License.
  */
 
-package com.f2prateek.dashtimer.phone.activities;
+package com.f2prateek.dashtimer;
 
-import com.f2prateek.dashtimer.common.activities.ActivityModule;
+import com.f2prateek.dashtimer.common.DashTimerModule;
 import dagger.Module;
 
 @Module(
-    library = true,
     complete = false,
-    addsTo = ActivityModule.class,
     injects = {
-        MainActivity.class
-    } //
+        DashTimerPhoneApp.class
+    },
+    addsTo = DashTimerModule.class //
 )
-final class PhoneActivityModule {
+final class DashTimerPhoneModule {
 }

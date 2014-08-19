@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.f2prateek.dashtimer.phone;
+package com.f2prateek.dashtimer;
 
 import com.f2prateek.dashtimer.common.DashTimerApp;
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.f2prateek.dashtimer.wear.activities;
+package com.f2prateek.dashtimer.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,7 +22,7 @@ import android.support.wearable.view.WatchViewStub;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import com.f2prateek.dashtimer.wear.R;
+import com.f2prateek.dashtimer.R;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.wearable.DataApi;

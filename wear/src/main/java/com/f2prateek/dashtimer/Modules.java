@@ -14,12 +14,18 @@
  * limitations under the License.
  */
 
-package com.f2prateek.dashtimer.wear;
+package com.f2prateek.dashtimer;
 
-import com.f2prateek.dashtimer.common.DashTimerApp;
+import com.f2prateek.dashtimer.common.DashTimerModule;
 
-public class DashTimerWearApp extends DashTimerApp {
-  @Override protected Object[] getModules() {
-    return Modules.list(this);
+final class Modules {
+  static Object[] list(DashTimerWearApp app) {
+    return new Object[] {
+        new DashTimerModule(app), new DashTimerWearModule()
+    };
+  }
+
+  private Modules() {
+    throw new AssertionError("No instances");
   }
 }

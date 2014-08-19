@@ -31,7 +31,7 @@ android {
     minSdkVersion rootProject.ext.minSdkVersion
     targetSdkVersion rootProject.ext.targetSdkVersion
 
-    applicationId rootProject.ext.applicationId + ".phone"
+    applicationId rootProject.ext.applicationId
     versionCode rootProject.ext.versionCode
     versionName rootProject.ext.versionName
 

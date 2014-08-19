@@ -14,18 +14,12 @@
  * limitations under the License.
  */
 
-package com.f2prateek.dashtimer.wear.activities;
+package com.f2prateek.dashtimer.activities;
 
-import com.f2prateek.dashtimer.common.activities.ActivityModule;
-import dagger.Module;
+import com.f2prateek.dashtimer.common.activities.BaseActivity;
 
-@Module(
-    library = true,
-    complete = false,
-    addsTo = ActivityModule.class,
-    injects = {
-        MainActivity.class, TimerActivity.class
-    } //
-)
-final class WearActivityModule {
+public class BaseWearActivity extends BaseActivity {
+  @Override protected Object[] getModules() {
+    return Modules.list(this);
+  }
 }
