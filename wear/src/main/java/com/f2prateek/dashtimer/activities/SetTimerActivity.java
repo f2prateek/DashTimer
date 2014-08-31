@@ -16,6 +16,8 @@
 
 package com.f2prateek.dashtimer.activities;
 
+import android.app.AlarmManager;
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.wearable.view.WatchViewStub;
@@ -23,51 +25,44 @@ import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.f2prateek.dashtimer.R;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.wearable.DataApi;
-import com.google.android.gms.wearable.PutDataMapRequest;
-import com.google.android.gms.wearable.PutDataRequest;
-import com.google.android.gms.wearable.Wearable;
+import com.f2prateek.dashtimer.services.TimerService;
 import javax.inject.Inject;
 
 import static android.provider.AlarmClock.ACTION_SET_TIMER;
 import static android.provider.AlarmClock.EXTRA_LENGTH;
 
-public class TimerActivity extends BaseWearActivity {
-  @Inject GoogleApiClient googleApiClient;
+public class SetTimerActivity extends BaseWearActivity {
+  @Inject NotificationManager notificationManager;
+  @Inject AlarmManager alarmManager;
   @InjectView(R.id.text) TextView textView;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_main);
-    final WatchViewStub stub = ButterKnife.findById(this, R.id.watch_view_stub);
-    stub.setOnLayoutInflatedListener(new WatchViewStub.OnLayoutInflatedListener() {
-      @Override
-      public void onLayoutInflated(WatchViewStub stub) {
-        ButterKnife.inject(TimerActivity.this, stub);
-        handleIntent(getIntent());
-      }
-    });
+
+    handleIntent(getIntent());
   }
 
   private void handleIntent(Intent intent) {
     if (intent == null || !ACTION_SET_TIMER.equals(intent.getAction())) {
       return;
     }
+
     if (!intent.hasExtra(EXTRA_LENGTH)) {
-      // todo: prompt for input
+      // todo: prompt for entry
+      setContentView(R.layout.activity_main);
+      final WatchViewStub stub = ButterKnife.findById(this, R.id.watch_view_stub);
+      stub.setOnLayoutInflatedListener(new WatchViewStub.OnLayoutInflatedListener() {
+        @Override
+        public void onLayoutInflated(WatchViewStub stub) {
+          textView.setText("No duration received!");
+        }
+      });
       return;
     }
 
-    final long length = 1000L * intent.getIntExtra(EXTRA_LENGTH, 0);
-    textView.setText(String.valueOf(getIntent().getExtras().getInt(EXTRA_LENGTH)));
-
-    PutDataMapRequest dataMap = PutDataMapRequest.create("/count");
-    dataMap.getDataMap().putInt("count", 10);
-    PutDataRequest request = dataMap.asPutDataRequest();
-    PendingResult<DataApi.DataItemResult> pendingResult =
-        Wearable.DataApi.putDataItem(googleApiClient, request);
+    final long duration = 1000 * intent.getIntExtra(EXTRA_LENGTH, 0);
+    startService(TimerService.makeStartTimerIntent(this, System.currentTimeMillis(), duration));
+    finish();
   }
 }

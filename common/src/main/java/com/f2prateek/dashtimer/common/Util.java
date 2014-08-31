@@ -14,18 +14,16 @@
  * limitations under the License.
  */
 
-package com.f2prateek.dashtimer.activities;
+package com.f2prateek.dashtimer.common;
 
-import com.f2prateek.dashtimer.common.activities.ActivityModule;
-import dagger.Module;
+import android.content.Context;
 
-@Module(
-    library = true,
-    complete = false,
-    addsTo = ActivityModule.class,
-    injects = {
-        MainActivity.class, SetTimerActivity.class
-    } //
-)
-final class WearActivityModule {
+public class Util {
+  private Util() {
+    throw new AssertionError("No instances allowed.");
+  }
+
+  public static <T> T getSystemService(Context context, String name) {
+    return (T) context.getSystemService(name);
+  }
 }

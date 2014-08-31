@@ -16,12 +16,18 @@
 
 package com.f2prateek.dashtimer.common;
 
+import android.app.AlarmManager;
 import android.app.Application;
+import android.app.NotificationManager;
 import android.content.Context;
 import com.f2prateek.dashtimer.common.data.DataModule;
 import dagger.Module;
 import dagger.Provides;
 import javax.inject.Singleton;
+
+import static android.content.Context.ALARM_SERVICE;
+import static android.content.Context.NOTIFICATION_SERVICE;
+import static com.f2prateek.dashtimer.common.Util.getSystemService;
 
 @Module(
     library = true,
@@ -45,5 +51,13 @@ public final class DashTimerModule {
 
   @Provides @ForApplication Context provideApplicationContext() {
     return app;
+  }
+
+  @Provides NotificationManager provideNotificationManager(@ForApplication Context context) {
+    return getSystemService(context, NOTIFICATION_SERVICE);
+  }
+
+  @Provides AlarmManager provideAlarmManager(@ForApplication Context context) {
+    return getSystemService(context, ALARM_SERVICE);
   }
 }

@@ -23,6 +23,7 @@ import android.os.Bundle;
 import com.f2prateek.dart.Dart;
 import com.f2prateek.dashtimer.common.DashTimerApp;
 import com.f2prateek.dashtimer.common.ForActivity;
+import com.mariux.teleport.lib.TeleportClient;
 import com.squareup.otto.Bus;
 import dagger.ObjectGraph;
 import hugo.weaving.DebugLog;
@@ -41,6 +42,7 @@ import javax.inject.Inject;
  */
 public abstract class BaseActivity extends Activity {
   @Inject Bus bus;
+  @Inject TeleportClient teleportClient;
   @Inject @ForActivity Context activityContext;
 
   private ObjectGraph activityGraph;
@@ -70,10 +72,16 @@ public abstract class BaseActivity extends Activity {
   }
 
   /**
-   * A list of modules to use for the individual activity graph. At the very lest, this must include
+   * A list of modules to use for the individual activity graph. At the very lest, this must
+   * include
    * all the inject points and {@link ActivityModule}.
    */
   protected abstract Object[] getModules();
+
+  @Override protected void onStart() {
+    super.onStart();
+    teleportClient.connect();
+  }
 
   @Override protected void onResume() {
     super.onResume();
@@ -83,6 +91,11 @@ public abstract class BaseActivity extends Activity {
   @Override protected void onPause() {
     bus.unregister(this);
     super.onPause();
+  }
+
+  @Override protected void onStop() {
+    super.onStop();
+    teleportClient.disconnect();
   }
 
   @Override protected void onDestroy() {

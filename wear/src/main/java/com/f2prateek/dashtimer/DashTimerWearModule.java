@@ -17,12 +17,13 @@
 package com.f2prateek.dashtimer;
 
 import com.f2prateek.dashtimer.common.DashTimerModule;
+import com.f2prateek.dashtimer.services.TimerService;
 import dagger.Module;
 
 @Module(
     complete = false,
     injects = {
-        DashTimerWearApp.class
+        DashTimerWearApp.class, TimerService.class
     },
     addsTo = DashTimerModule.class //
 )

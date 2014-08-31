@@ -12,6 +12,7 @@ buildscript {
 allprojects {
   repositories {
     mavenCentral()
+    jcenter()
   }
 }
 
@@ -48,4 +49,5 @@ ext.libraries = [dagger         : 'com.squareup.dagger:dagger:1.2.+',
                  dart           : 'com.f2prateek.dart:dart:1.1.+',
                  auto           : 'com.github.frankiesardo:android-auto-value-processor:+',
                  supportWearable: 'com.google.android.support:wearable:+',
+                 teleport       : 'Teleport:teleportlib:0.1.2',
                  playWearable   : 'com.google.android.gms:play-services-wearable:+']

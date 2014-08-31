@@ -17,10 +17,12 @@
 package com.f2prateek.dashtimer.common.data;
 
 import android.app.Application;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import com.f2prateek.dashtimer.common.data.google.GoogleApiModule;
+import com.f2prateek.dashtimer.common.ForApplication;
+import com.mariux.teleport.lib.TeleportClient;
 import com.squareup.otto.Bus;
 import dagger.Module;
 import dagger.Provides;
@@ -33,7 +35,7 @@ import static android.content.Context.MODE_PRIVATE;
  */
 @Module(
     includes = {
-        GoogleApiModule.class, UserPreferencesModule.class
+        UserPreferencesModule.class
     },
     complete = false,
     library = true)
@@ -52,5 +54,9 @@ public final class DataModule {
     } catch (PackageManager.NameNotFoundException e) {
       throw new RuntimeException(e);
     }
+  }
+
+  @Provides @Singleton TeleportClient provideTeleportClient(@ForApplication Context context) {
+    return new TeleportClient(context);
   }
 }
