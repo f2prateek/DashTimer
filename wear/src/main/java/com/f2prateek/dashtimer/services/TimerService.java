@@ -89,7 +89,7 @@ public class TimerService extends BaseService {
             .setLocalOnly(true)
             .build()
     );
-    long endTime = System.currentTimeMillis() + duration;
+    long endTime = startTime + duration;
     alarmManager.setExact(RTC_WAKEUP, endTime, getCompletedTimerIntent(duration));
   }
 
