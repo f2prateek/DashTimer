@@ -42,7 +42,6 @@ dependencies {
   compile rootProject.ext.libraries.ln
   compile rootProject.ext.libraries.butterknife
   compile rootProject.ext.libraries.dart
-  apt rootProject.ext.libraries.auto
   compile rootProject.ext.libraries.playWearable
   compile rootProject.ext.libraries.teleport
 }

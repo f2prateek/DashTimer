@@ -47,7 +47,6 @@ ext.libraries = [dagger         : 'com.squareup.dagger:dagger:1.2.+',
                  ln             : 'com.f2prateek.ln:ln:1.1.+',
                  butterknife    : 'com.jakewharton:butterknife:5.1.+',
                  dart           : 'com.f2prateek.dart:dart:1.1.+',
-                 auto           : 'com.github.frankiesardo:android-auto-value-processor:+',
                  supportWearable: 'com.google.android.support:wearable:+',
                  teleport       : 'Teleport:teleportlib:0.1.2',
                  playWearable   : 'com.google.android.gms:play-services-wearable:+']
