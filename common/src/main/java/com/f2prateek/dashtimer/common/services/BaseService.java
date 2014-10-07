@@ -20,13 +20,23 @@ import android.app.IntentService;
 import android.content.Intent;
 import com.f2prateek.dart.Dart;
 import com.f2prateek.dashtimer.common.DashTimerApp;
-import com.mariux.teleport.lib.TeleportClient;
+import com.f2prateek.ln.Ln;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.wearable.MessageApi;
+import com.google.android.gms.wearable.Node;
+import com.google.android.gms.wearable.NodeApi;
+import com.google.android.gms.wearable.Wearable;
+import com.google.gson.Gson;
 import com.squareup.otto.Bus;
+import hugo.weaving.DebugLog;
+import java.util.Collection;
+import java.util.HashSet;
 import javax.inject.Inject;
 
 public abstract class BaseService extends IntentService {
   @Inject Bus bus;
-  @Inject TeleportClient teleportClient;
+  @Inject GoogleApiClient googleApiClient;
+  @Inject Gson gson;
 
   public BaseService(String name) {
     super(name);
@@ -38,7 +48,7 @@ public abstract class BaseService extends IntentService {
 
     DashTimerApp.get(this).inject(this);
     bus.register(this);
-    teleportClient.connect();
+    googleApiClient.connect();
   }
 
   @Override protected void onHandleIntent(Intent intent) {
@@ -48,6 +58,28 @@ public abstract class BaseService extends IntentService {
   @Override public void onDestroy() {
     super.onDestroy();
     bus.unregister(this);
-    teleportClient.disconnect();
+    googleApiClient.disconnect();
+  }
+
+  @DebugLog Collection<String> getNodes() {
+    googleApiClient.blockingConnect();
+    HashSet<String> results = new HashSet<String>();
+    NodeApi.GetConnectedNodesResult nodes =
+        Wearable.NodeApi.getConnectedNodes(googleApiClient).await();
+    for (Node node : nodes.getNodes()) {
+      results.add(node.getId());
+    }
+    return results;
+  }
+
+  @DebugLog public void sendMessage(String path, Object object) {
+    for (String node : getNodes()) {
+      MessageApi.SendMessageResult result =
+          Wearable.MessageApi.sendMessage(googleApiClient, node, path,
+              gson.toJson(object).getBytes()).await();
+      if (!result.getStatus().isSuccess()) {
+        Ln.e("Failed to send Message: " + result.getStatus());
+      }
+    }
   }
 }

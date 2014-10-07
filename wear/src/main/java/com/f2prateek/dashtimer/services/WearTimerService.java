@@ -14,19 +14,20 @@
  * limitations under the License.
  */
 
-package com.f2prateek.dashtimer;
+package com.f2prateek.dashtimer.services;
 
-import com.f2prateek.dashtimer.common.DashTimerModule;
-import com.f2prateek.dashtimer.services.PhoneTimerListenerService;
-import com.f2prateek.dashtimer.services.PhoneTimerService;
-import dagger.Module;
+import com.f2prateek.dashtimer.common.data.Timer;
+import com.f2prateek.dashtimer.common.services.TimerService;
 
-@Module(
-    complete = false,
-    injects = {
-        DashTimerPhoneApp.class, PhoneTimerListenerService.class, PhoneTimerService.class
-    },
-    addsTo = DashTimerModule.class //
-)
-final class DashTimerPhoneModule {
+public class WearTimerService extends TimerService {
+
+  @Override protected void startTimer(Timer timer) {
+    super.startTimer(timer);
+    sendMessage("/" + ACTION_START_TIMER, timer);
+  }
+
+  @Override protected void restartTimer(long duration) {
+    super.restartTimer(duration);
+    sendMessage("/" + ACTION_START_TIMER, new Timer(System.currentTimeMillis(), duration));
+  }
 }

@@ -14,19 +14,20 @@
  * limitations under the License.
  */
 
-package com.f2prateek.dashtimer;
+package com.f2prateek.dashtimer.services;
 
-import com.f2prateek.dashtimer.common.DashTimerModule;
-import com.f2prateek.dashtimer.services.PhoneTimerListenerService;
-import com.f2prateek.dashtimer.services.PhoneTimerService;
-import dagger.Module;
+import android.content.Intent;
+import com.f2prateek.dashtimer.common.data.Timer;
+import com.f2prateek.dashtimer.common.services.TimerService;
+import hugo.weaving.DebugLog;
 
-@Module(
-    complete = false,
-    injects = {
-        DashTimerPhoneApp.class, PhoneTimerListenerService.class, PhoneTimerService.class
-    },
-    addsTo = DashTimerModule.class //
-)
-final class DashTimerPhoneModule {
+public class PhoneTimerService extends TimerService {
+
+  @DebugLog @Override protected void onHandleIntent(Intent intent) {
+    super.onHandleIntent(intent);
+  }
+
+  @DebugLog @Override protected void startTimer(Timer timer) {
+    super.startTimer(timer);
+  }
 }

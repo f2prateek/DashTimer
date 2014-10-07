@@ -25,7 +25,8 @@ import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.f2prateek.dashtimer.R;
-import com.f2prateek.dashtimer.services.TimerService;
+import com.f2prateek.dashtimer.common.services.TimerService;
+import com.f2prateek.dashtimer.services.WearTimerService;
 import javax.inject.Inject;
 
 import static android.provider.AlarmClock.ACTION_SET_TIMER;
@@ -62,7 +63,8 @@ public class SetTimerActivity extends BaseWearActivity {
     }
 
     final long duration = 1000 * intent.getIntExtra(EXTRA_LENGTH, 0);
-    startService(TimerService.makeStartTimerIntent(this, System.currentTimeMillis(), duration));
+    startService(TimerService.makeStartTimerIntent(this, System.currentTimeMillis(), duration,
+        WearTimerService.class));
     finish();
   }
 }

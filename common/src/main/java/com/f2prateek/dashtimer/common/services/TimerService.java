@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.f2prateek.dashtimer.services;
+package com.f2prateek.dashtimer.common.services;
 
 import android.app.AlarmManager;
 import android.app.Notification;
@@ -22,9 +22,8 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import com.f2prateek.dashtimer.R;
-import com.f2prateek.dashtimer.common.services.BaseService;
-import com.mariux.teleport.lib.TeleportClient;
+import com.f2prateek.dashtimer.common.R;
+import com.f2prateek.dashtimer.common.data.Timer;
 import javax.inject.Inject;
 
 import static android.app.AlarmManager.RTC_WAKEUP;
@@ -32,19 +31,18 @@ import static android.app.PendingIntent.FLAG_UPDATE_CURRENT;
 import static android.app.PendingIntent.getService;
 
 public class TimerService extends BaseService {
-  static final String EXTRA_DURATION = "duration";
-  static final String EXTRA_START_TIME = "startTime";
+  public static final String EXTRA_DURATION = "duration";
+  public static final String EXTRA_START_TIME = "startTime";
 
-  static final String ACTION_START_TIMER = "START_TIMER";
-  static final String ACTION_TIMER_COMPLETED = "TIMER_COMPLETED";
-  static final String ACTION_DELETE_TIMER = "DELETE_TIMER";
-  static final String ACTION_RESTART_TIMER = "RESTART_TIMER";
+  public static final String ACTION_START_TIMER = "START_TIMER";
+  public static final String ACTION_TIMER_COMPLETED = "TIMER_COMPLETED";
+  public static final String ACTION_DELETE_TIMER = "DELETE_TIMER";
+  public static final String ACTION_RESTART_TIMER = "RESTART_TIMER";
 
   static final int NOTIFICATION_TIMER = 1;
 
   @Inject NotificationManager notificationManager;
   @Inject AlarmManager alarmManager;
-  @Inject TeleportClient teleportClient;
 
   public TimerService() {
     super("TimerService");
@@ -56,7 +54,7 @@ public class TimerService extends BaseService {
     if (ACTION_START_TIMER.equals(action)) {
       long duration = intent.getLongExtra(EXTRA_DURATION, 6000L);
       long startTime = intent.getLongExtra(EXTRA_START_TIME, System.currentTimeMillis());
-      startTimer(startTime, duration);
+      startTimer(new Timer(startTime, duration));
     } else if (ACTION_RESTART_TIMER.equals(action)) {
       long duration = intent.getLongExtra(EXTRA_DURATION, 6000L);
       restartTimer(duration);
@@ -71,36 +69,35 @@ public class TimerService extends BaseService {
   }
 
   /** Start the timer with the given start time and duration */
-  void startTimer(long startTime, long duration) {
+  protected void startTimer(Timer timer) {
     // Start time is needed so we can correctly synchronize the end times on both phone and wear
     // With just end time we lose the ability to remember the duration to restart the timer
+
     PendingIntent deleteTimerIntent = getDeleteTimerIntent();
     notificationManager.notify(NOTIFICATION_TIMER,
         new Notification.Builder(this).setSmallIcon(R.drawable.app_icon)
             .setContentTitle(getString(R.string.time_left))
-            .setContentText(String.valueOf(duration))
+            .setContentText(String.valueOf(timer.duration()))
             .setUsesChronometer(true)
-            .setWhen(startTime + duration)
+            .setWhen(timer.endTime())
             .addAction(R.drawable.ic_action_restart, getString(R.string.restart_timer),
-                getRestartTimerIntent(duration))
+                getRestartTimerIntent(timer.duration()))
             .addAction(R.drawable.ic_action_cancel, getString(R.string.delete_timer),
                 deleteTimerIntent)
             .setDeleteIntent(deleteTimerIntent)
-            .setLocalOnly(true)
-            .build()
-    );
-    long endTime = startTime + duration;
-    alarmManager.setExact(RTC_WAKEUP, endTime, getCompletedTimerIntent(duration));
+            .setDefaults(Notification.DEFAULT_ALL)
+            .build());
+    alarmManager.setExact(RTC_WAKEUP, timer.endTime(), getCompletedTimerIntent(timer.duration()));
   }
 
   /** Starts the timer with the current time as the start time */
-  void restartTimer(long duration) {
+  protected void restartTimer(long duration) {
     notificationManager.cancel(NOTIFICATION_TIMER);
-    startTimer(System.currentTimeMillis(), duration);
+    startTimer(new Timer(System.currentTimeMillis(), duration));
   }
 
   /** Finish the timer */
-  void timerCompleted(long duration) {
+  protected void timerCompleted(long duration) {
     notificationManager.cancel(NOTIFICATION_TIMER);
     notificationManager.notify(NOTIFICATION_TIMER,
         new Notification.Builder(this).setSmallIcon(R.drawable.app_icon)
@@ -110,36 +107,35 @@ public class TimerService extends BaseService {
             .setWhen(System.currentTimeMillis())
             .addAction(R.drawable.ic_action_restart, getString(R.string.restart_timer),
                 getRestartTimerIntent(duration))
-            .setLocalOnly(true)
             .setDefaults(Notification.DEFAULT_ALL)
-            .build()
-    );
+            .build());
   }
 
-  void deleteTimer() {
+  protected void deleteTimer() {
     notificationManager.cancel(NOTIFICATION_TIMER);
     alarmManager.cancel(getCompletedTimerIntent(0)); // duration is not needed here
   }
 
   PendingIntent getDeleteTimerIntent() {
-    Intent intent = new Intent(ACTION_DELETE_TIMER, null, this, TimerService.class);
+    Intent intent = new Intent(ACTION_DELETE_TIMER, null, this, getClass());
     return getService(this, 0, intent, FLAG_UPDATE_CURRENT);
   }
 
   PendingIntent getCompletedTimerIntent(long duration) {
-    Intent intent = new Intent(ACTION_TIMER_COMPLETED, null, this, TimerService.class);
+    Intent intent = new Intent(ACTION_TIMER_COMPLETED, null, this, getClass());
     intent.putExtra(EXTRA_DURATION, duration);
     return getService(this, 0, intent, FLAG_UPDATE_CURRENT);
   }
 
   PendingIntent getRestartTimerIntent(long duration) {
-    Intent intent = new Intent(ACTION_RESTART_TIMER, null, this, TimerService.class);
+    Intent intent = new Intent(ACTION_RESTART_TIMER, null, this, getClass());
     intent.putExtra(EXTRA_DURATION, duration);
     return getService(this, 0, intent, FLAG_UPDATE_CURRENT);
   }
 
-  public static Intent makeStartTimerIntent(Context context, long startTime, long duration) {
-    Intent intent = new Intent(ACTION_START_TIMER, null, context, TimerService.class);
+  public static Intent makeStartTimerIntent(Context context, long startTime, long duration,
+      Class<? extends TimerService> clazz) {
+    Intent intent = new Intent(ACTION_START_TIMER, null, context, clazz);
     intent.putExtra(EXTRA_DURATION, duration);
     intent.putExtra(EXTRA_START_TIME, startTime);
     return intent;

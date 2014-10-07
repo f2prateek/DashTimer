@@ -14,19 +14,28 @@
  * limitations under the License.
  */
 
-package com.f2prateek.dashtimer;
+package com.f2prateek.dashtimer.common.data;
 
-import com.f2prateek.dashtimer.common.DashTimerModule;
-import com.f2prateek.dashtimer.services.PhoneTimerListenerService;
-import com.f2prateek.dashtimer.services.PhoneTimerService;
-import dagger.Module;
+public final class Timer {
+  final long startTime;
+  final long duration;
+  final long endTime;
 
-@Module(
-    complete = false,
-    injects = {
-        DashTimerPhoneApp.class, PhoneTimerListenerService.class, PhoneTimerService.class
-    },
-    addsTo = DashTimerModule.class //
-)
-final class DashTimerPhoneModule {
+  public Timer(long startTime, long duration) {
+    this.startTime = startTime;
+    this.duration = duration;
+    this.endTime = startTime + duration;
+  }
+
+  public long startTime() {
+    return startTime;
+  }
+
+  public long duration() {
+    return duration;
+  }
+
+  public long endTime() {
+    return endTime;
+  }
 }

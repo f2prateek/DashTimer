@@ -43,7 +43,7 @@ dependencies {
   compile rootProject.ext.libraries.butterknife
   compile rootProject.ext.libraries.dart
   compile rootProject.ext.libraries.playWearable
-  compile rootProject.ext.libraries.teleport
+  compile rootProject.ext.libraries.gson
 }
 
 apply from: rootProject.file('gradle/checkstyle-library.gradle')

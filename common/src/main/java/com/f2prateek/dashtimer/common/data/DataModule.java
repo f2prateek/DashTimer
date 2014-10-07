@@ -22,7 +22,9 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import com.f2prateek.dashtimer.common.ForApplication;
-import com.mariux.teleport.lib.TeleportClient;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.wearable.Wearable;
+import com.google.gson.Gson;
 import com.squareup.otto.Bus;
 import dagger.Module;
 import dagger.Provides;
@@ -56,7 +58,11 @@ public final class DataModule {
     }
   }
 
-  @Provides @Singleton TeleportClient provideTeleportClient(@ForApplication Context context) {
-    return new TeleportClient(context);
+  @Provides @Singleton GoogleApiClient provideGoogleApiClient(@ForApplication Context context) {
+    return new GoogleApiClient.Builder(context).addApi(Wearable.API).build();
+  }
+
+  @Provides @Singleton Gson provideGson() {
+    return new Gson();
   }
 }
